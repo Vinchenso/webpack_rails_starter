@@ -32,11 +32,6 @@ var config = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          loaders: {
-          }
-          // other vue-loader options go here
-        }
       },
       {
         test: /\.js$/,
@@ -56,7 +51,10 @@ var config = {
   devtool: '#eval-source-map',
 
   resolve: {
-    root: path.join(__dirname, '..', 'webpack')
+    modules: [
+      path.join(__dirname, '..', 'webpack'),
+      "node_modules"
+    ]
   },
 
   plugins: [
@@ -74,15 +72,11 @@ var config = {
 if (production) {
 config.plugins.push(
   new webpack.NoErrorsPlugin(),
-  new webpack.optimize.UglifyJsPlugin({
-    compressor: { warnings: false },
-    sourceMap: false
-  }),
+  new webpack.optimize.UglifyJsPlugin(),
   new webpack.DefinePlugin({
     'process.env': { NODE_ENV: JSON.stringify('production') }
   }),
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.OccurenceOrderPlugin()
+  new webpack.optimize.DedupePlugin()
 );
 } else {
 config.devServer = {
